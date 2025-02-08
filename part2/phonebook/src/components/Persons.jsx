@@ -1,10 +1,10 @@
 import Note from './Note'
 
-const Persons = ({ personsToShow}) => {
+const Persons = ({ personsToShow, handleDelete}) => {
     return (
         <ul>
         {personsToShow.map(person =>
-          <Note key={person.name} note={person} />
+          <Note key={person.name} note={person} handleDelete={() => handleDelete(person.id)}/>
         )}
       </ul>
     );

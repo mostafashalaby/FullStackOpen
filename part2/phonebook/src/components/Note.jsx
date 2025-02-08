@@ -1,5 +1,9 @@
-const Note = ({ note }) => {
-    return <li>{note.name} {note.number}</li>
+const Note = ({ note, handleDelete }) => {
+    return (
+      <li>
+        {note.name} {note.number} <button onClick={handleDelete}>delete</button>
+      </li>
+    )
   }
   
 export default Note
