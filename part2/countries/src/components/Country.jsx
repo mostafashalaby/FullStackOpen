@@ -8,11 +8,9 @@ const Country = ({ country }) => {
         const access_key = import.meta.env.VITE_SOME_KEY
         const query = country.capital
 
-        console.log(access_key, query)
         countriesService
             .getWeatherData({access_key, query})
             .then(weatherData => {
-                console.log(weatherData)
                 setWeather(weatherData)
             })
             .catch(error => {

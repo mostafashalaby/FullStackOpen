@@ -10,7 +10,6 @@ const App = () => {
   useEffect(() => {
     countriesService.getAll().then(initialCountries => {
       setCountries(initialCountries);
-      console.log(initialCountries);
     });
   }, []);
 
