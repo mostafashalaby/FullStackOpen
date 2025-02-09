@@ -11,4 +11,11 @@ const getCountryData = ({country}) => {
   return request.then(response => response.data)
 }
 
-export default { getAll, getCountryData}
+const getWeatherData = ({access_key, query}) => {
+  const header = `http://api.weatherstack.com/current?access_key=${access_key}&query=${query}`
+  console.log(header)
+  const request = axios.get(header)
+  return request.then(response => response.data)
+}
+
+export default { getAll, getCountryData, getWeatherData}
