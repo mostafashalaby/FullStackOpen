@@ -13,7 +13,6 @@ const App = () => {
   const [notificationMessage, setNotificationMessage] = useState(null)
   const [notificationType, setNotificationType] = useState('success');
 
-
   const loadPersons = () => {
     console.log('effect')
     personService
@@ -22,6 +21,10 @@ const App = () => {
         console.log('promise fulfilled')
         setPersons(initialPersons)
       })
+      .catch(error => {
+        console.error('Failed to fetch persons', error);
+        setPersons([]);
+      });
   }
 
   useEffect(loadPersons, [])
