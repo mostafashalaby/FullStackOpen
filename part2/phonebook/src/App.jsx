@@ -90,6 +90,16 @@ const App = () => {
             setNotificationMessage(null)
           }, 5000)
         })
+        .catch(error => {
+          console.error('Failed to add person', error);
+
+          setNotificationMessage(error.response.data.error);
+          setNotificationType('error');
+
+          setTimeout(() => {
+            setNotificationMessage(null)
+          }, 5000)
+        });
     }
   }
 
