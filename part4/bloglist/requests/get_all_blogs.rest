@@ -1,0 +1,17 @@
+GET http://localhost:3003/api/blogs
+
+###
+
+DELETE http://localhost:3001/api/persons/4234
+
+###
+
+POST http://localhost:3003/api/blogs
+content-type: application/json
+
+{
+    "title": "Why I am the Big Boss",
+    "author": "Big boss",
+    "url": "https://www.google.com",
+    "likes": 0
+}
