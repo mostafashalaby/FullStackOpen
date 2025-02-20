@@ -10,7 +10,7 @@ POST http://localhost:3003/api/blogs
 content-type: application/json
 
 {
-    "title": "Why I am the Big Boss",
+    "title": "Why I am the Big Boss AGAIN",
     "author": "Big boss",
     "url": "https://www.google.com",
     "likes": 0
