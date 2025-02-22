@@ -7,74 +7,66 @@ const mostLikes = require('../utils/list_helper.js').mostLikes
 describe('most likes', () => {
   const listWithOneBlog = [
     {
-      _id: '5a422aa71b54a676234d17f8',
+      id: '5a422aa71b54a676234d17f8',
       title: 'Go To Statement Considered Harmful',
       author: 'Edsger W. Dijkstra',
       url: 'https://homepages.cwi.nl/~storm/teaching/reader/Dijkstra68.pdf',
-      likes: 5,
-      __v: 0
+      likes: 5
     }
   ]
 
   const listWithMultiplelikes = [
     {
-      _id: '5a422aa71b54a676234d17f9',
+      id: '5a422aa71b54a676234d17f9',
       title: 'Go To Statement Considered Harmful',
       author: 'Edsger W. Dijkstra',
       url: 'https://homepages.cwi.nl/~storm/teaching/reader/Dijkstra68.pdf',
-      likes: 40,
-      __v: 0
+      likes: 40
     },
     {
-      _id: '5a422aa71b54a676234d17f8',
+      id: '5a422aa71b54a676234d17f8',
       title: 'Vroom?',
       author: 'Da Baby',
       url: 'https://homepages.cwi.nl/~storm/teaching/reader/Dijkstra68.pdf',
-      likes: 12,
-      __v: 0
+      likes: 12
     },
     {
-      _id: '5a422aa71b54a676234d17f5',
+      id: '5a422aa71b54a676234d17f5',
       title: 'Leafy the beefy',
       author: 'Da Baby',
       url: 'https://homepages.cwi.nl/~storm/teaching/reader/Dijkstra68.pdf',
-      likes: 88,
-      __v: 0
+      likes: 88
     }
   ]
 
   const listWithMultiplelikesRepeatedTop = [
     {
-      _id: '5a422aa71b54a676234d17f9',
+      id: '5a422aa71b54a676234d17f9',
       title: 'Go To Statement Considered Harmful',
       author: 'Edsger W. Dijkstra',
       url: 'https://homepages.cwi.nl/~storm/teaching/reader/Dijkstra68.pdf',
-      likes: 7,
-      __v: 0
+      likes: 7
     },
     {
-      _id: '5a422aa71b54a676234d17f4',
+      id: '5a422aa71b54a676234d17f4',
       title: 'Hi guys',
       author: 'Edsger W. Dijkstra',
       url: 'https://homepages.cwi.nl/~storm/teaching/reader/Dijkstra68.pdf',
-      likes: 40,
-      __v: 0
+      likes: 40
     },
     {
-      _id: '5a422aa71b54a676234d17f8',
+      id: '5a422aa71b54a676234d17f8',
       title: 'Vroom?',
       author: 'Da Baby',
       url: 'https://homepages.cwi.nl/~storm/teaching/reader/Dijkstra68.pdf',
-      likes: 40,
-      __v: 0
+      likes: 40
     },
     {
-      _id: '5a422aa71b54a676234d17f5',
+      id: '5a422aa71b54a676234d17f5',
       title: 'Leafy the beefy',
       author: 'Da Baby',
       url: 'https://homepages.cwi.nl/~storm/teaching/reader/Dijkstra68.pdf',
-      likes: 7,
-      __v: 0
+      likes: 7
     }
   ]
 

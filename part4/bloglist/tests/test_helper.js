@@ -14,7 +14,7 @@ const initialBlogs = [
     title: 'Vroom?',
     author: 'Da Baby',
     url: 'https://homepages.cwi.nl/~storm/teaching/reader/Dijkstra68.pdf',
-    likes: 0,
+    likes: 10,
     __v: 0
   },
 ]
