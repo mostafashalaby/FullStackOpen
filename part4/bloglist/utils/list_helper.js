@@ -49,7 +49,6 @@ const mostLikes = (blogs) => {
     {}
   )
 
-  console.log(likesByAuthor)
   const author = lodash.maxBy(Object.keys(likesByAuthor), (author) => likesByAuthor[author])
 
 
