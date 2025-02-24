@@ -1,3 +1,4 @@
+const jwt = require('jsonwebtoken')
 const Blog = require('../models/blog')
 const User = require('../models/user')
 
@@ -44,9 +45,27 @@ const usersInDb = async () => {
   return users.map(u => u.toJSON())
 }
 
+const getValidToken = async () => {
+  const user = await User.findOne() // Get any existing user
+  if (!user) {
+    throw new Error('No users found in the database. Ensure a user exists before calling getValidToken.')
+  }
+
+  const userForToken = {
+    username: user.username,
+    id: user._id.toString(),
+  }
+
+  const token = jwt.sign(userForToken, process.env.SECRET, { expiresIn: '1h' })
+  console.log(token)
+  return token
+}
+
+
 module.exports = {
   initialBlogs,
   nonExistingId,
   blogsInDb,
   usersInDb,
+  getValidToken
 }
