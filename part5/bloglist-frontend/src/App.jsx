@@ -9,8 +9,8 @@ import BlogForm from './components/BlogForm'
 const App = () => {
   const [blogs, setBlogs] = useState([])
   const [notificationMessage, setNotificationMessage] = useState(null)
-  const [notificationType, setNotificationType] = useState('success');
-  const [username, setUsername] = useState('') 
+  const [notificationType, setNotificationType] = useState('success')
+  const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
 
@@ -19,7 +19,7 @@ const App = () => {
   useEffect(() => {
     blogService.getAll().then(blogs =>
       setBlogs( blogs )
-    )  
+    )
   }, [])
 
   useEffect(() => {
@@ -33,21 +33,21 @@ const App = () => {
 
   const handleLogin = async (event) => {
     event.preventDefault()
-    
+
     try {
       const user = await loginService.login({
         username, password,
       })
       window.localStorage.setItem(
         'loggedBlogappUser', JSON.stringify(user)
-      ) 
+      )
       blogService.setToken(user.token)
       setUser(user)
       setUsername('')
       setPassword('')
 
       setNotificationMessage('Logged in successfully')
-      setNotificationType('success');
+      setNotificationType('success')
 
       setTimeout(() => {
         setNotificationMessage(null)
@@ -55,7 +55,7 @@ const App = () => {
 
     } catch (exception) {
       setNotificationMessage('Wrong credentials')
-      setNotificationType('error');
+      setNotificationType('error')
       setTimeout(() => {
         setNotificationMessage(null)
       }, 5000)
@@ -70,7 +70,7 @@ const App = () => {
     setPassword('')
 
     setNotificationMessage('Logged out successfully')
-    setNotificationType('success');
+    setNotificationType('success')
 
     setTimeout(() => {
       setNotificationMessage(null)
@@ -85,15 +85,15 @@ const App = () => {
       setBlogs(blogs.concat(returnedBlog))
 
       setNotificationMessage(`A new blog ${returnedBlog.title} by ${returnedBlog.author} added`)
-      setNotificationType('success');
+      setNotificationType('success')
 
       setTimeout(() => {
         setNotificationMessage(null)
       }, 5000)
-      
+
     } catch (exception) {
       setNotificationMessage('Failed to create new blog')
-      setNotificationType('error');
+      setNotificationType('error')
 
       setTimeout(() => {
         setNotificationMessage(null)
@@ -110,14 +110,35 @@ const App = () => {
       setBlogs(blogs.map(blog => blog.id !== id ? blog : updatedBlog))
 
       setNotificationMessage(`Liked blog ${updatedBlog.title} by ${updatedBlog.author}`)
-      setNotificationType('success');
+      setNotificationType('success')
 
       setTimeout(() => {
         setNotificationMessage(null)
       }, 5000)
     } catch (exception) {
       setNotificationMessage('Failed to update like')
-      setNotificationType('error');
+      setNotificationType('error')
+
+      setTimeout(() => {
+        setNotificationMessage(null)
+      }, 5000)
+    }
+  }
+
+  const removeBlog = async (id) => {
+    try {
+      await blogService.remove(id)
+      setBlogs(blogs.filter(blog => blog.id !== id))
+
+      setNotificationMessage('Blog removed successfully')
+      setNotificationType('success')
+
+      setTimeout(() => {
+        setNotificationMessage(null)
+      }, 5000)
+    } catch (exception) {
+      setNotificationMessage('Failed to remove blog')
+      setNotificationType('error')
 
       setTimeout(() => {
         setNotificationMessage(null)
@@ -130,8 +151,8 @@ const App = () => {
       <h1>Log in to the application</h1>
       <form onSubmit={handleLogin}>
         <div>
-          username 
-            <input
+          username
+          <input
             type="text"
             value={username}
             name="Username"
@@ -139,8 +160,8 @@ const App = () => {
           />
         </div>
         <div>
-          password 
-            <input
+          password
+          <input
             type="password"
             value={password}
             name="Password"
@@ -149,7 +170,7 @@ const App = () => {
         </div>
         <button type="submit">login</button>
       </form>
-    </div>      
+    </div>
   )
 
   const blogForm = () => (
@@ -167,9 +188,16 @@ const App = () => {
         />
       </Togglable>
       <h2>Available Blogs</h2>
-      {blogs.map(blog =>
-        <Blog key={blog.id} blog={blog} updateLike={updateLike} />
-      )}
+      {blogs
+        .sort((a, b) => b.likes - a.likes)
+        .map(blog =>
+          <Blog
+            key={blog.id}
+            blog={blog}
+            updateLike={updateLike}
+            removeBlog={removeBlog}
+          />
+        )}
     </div>
   )
 
