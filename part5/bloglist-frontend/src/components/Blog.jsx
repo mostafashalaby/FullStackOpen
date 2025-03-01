@@ -10,7 +10,6 @@ const Blog = ({ blog, updateLike, removeBlog }) => {
   }
 
   const [visible, setVisible] = useState(false)
-  const showWhenVisible = { display: visible ? '' : 'none' }
 
   const handleLike = async (event) => {
     event.preventDefault()
@@ -35,17 +34,19 @@ const Blog = ({ blog, updateLike, removeBlog }) => {
   }
 
   return (
-    <div style={blogStyle}>
+    <div className='blog' style={blogStyle}>
       {blog.title} {blog.author}
       <button onClick={() => setVisible(!visible)}>{visible ? 'hide' : 'view'}</button>
-      <div style={showWhenVisible}>
-        <p>{blog.url}</p>
-        <p>{blog.likes} <button onClick={ handleLike }>
-          like
-        </button></p>
-        <p>{blog.user.name}</p>
-        <button onClick={ handleDelete }>remove</button>
-      </div>
+      {visible && (
+        <div>
+          <p>{blog.url}</p>
+          <p>{blog.likes} <button onClick={ handleLike }>
+            like
+          </button></p>
+          <p>{blog.user.name}</p>
+          <button onClick={ handleDelete }>remove</button>
+        </div>
+      )}
     </div>
   )
 }
