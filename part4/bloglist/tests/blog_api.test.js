@@ -184,7 +184,7 @@ describe('when there are some blogs saved initially and a user is logged in', ()
   })
 
   describe('updating a blog', () => {
-    test('succeeds with status code 200 if id is valid, updating likes', async () => {
+    test.only('succeeds with status code 200 if id is valid, updating likes', async () => {
       const blogsAtStart = await helper.blogsInDb()
       const blogToUpdate = blogsAtStart[0]
 
@@ -192,6 +192,7 @@ describe('when there are some blogs saved initially and a user is logged in', ()
 
       await api
         .put(`/api/blogs/${blogToUpdate.id}`)
+        .set('Authorization', `Bearer ${token}`)
         .send(updatedBlog)
         .expect(200)
         .expect('Content-Type', /application\/json/)
@@ -210,6 +211,7 @@ describe('when there are some blogs saved initially and a user is logged in', ()
       await helper.blogsInDb()
       await api
         .put('/api/blogs/invalididlol')
+        .set('Authorization', `Bearer ${token}`)
         .expect(400)
     })
   })

@@ -40,7 +40,7 @@ const Blog = ({ blog, updateLike, removeBlog }) => {
       {visible && (
         <div>
           <p>{blog.url}</p>
-          <p>{blog.likes} <button onClick={ handleLike }>
+          <p>{blog.likes} <button data-testid='like-button' onClick={ handleLike }>
             like
           </button></p>
           <p>{blog.user.name}</p>

@@ -103,6 +103,7 @@ const App = () => {
 
   const updateLike = async (id, blogObject) => {
     console.log('blogObject before update request', blogObject)
+    console.log('user', user)
 
     try {
       const updatedBlog = await blogService.update(id, blogObject)
@@ -155,7 +156,7 @@ const App = () => {
           <input
             type="text"
             value={username}
-            name="Username"
+            data-testid='username'
             onChange={({ target }) => setUsername(target.value)}
           />
         </div>
@@ -164,7 +165,7 @@ const App = () => {
           <input
             type="password"
             value={password}
-            name="Password"
+            data-testid='password'
             onChange={({ target }) => setPassword(target.value)}
           />
         </div>
