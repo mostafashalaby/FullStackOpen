@@ -53,6 +53,7 @@ describe('Blog app', () => {
       beforeEach(async ({ page }) => {
         await createBlog(page, 'first blog', 'author1', 'https://first.blog')
         await createBlog(page, 'second blog', 'author2', 'https://second.blog')
+        await createBlog(page, 'third blog', 'author3', 'https://third.blog')
       })
 
       test('a blog can be liked', async ({ page }) => {
@@ -62,7 +63,7 @@ describe('Blog app', () => {
         await expect(blog).toContainText('likes: 1')
       })
 
-      test.only('a blog can be deleted', async ({ page }) => {
+      test('a blog can be deleted', async ({ page }) => {
         page.on('dialog', async dialog => {
           await dialog.accept()
         })
@@ -89,6 +90,38 @@ describe('Blog app', () => {
         const blog = await page.getByText('second blog author2')
         await blog.getByRole('button', { name: 'view' }).click()
         await expect(blog.getByRole('button', { name: 'remove' })).not.toBeVisible()
+      })
+
+      test('blogs are ordered by likes', async ({ page }) => {
+        const blog1 = await page.getByText('first blog author1')
+        const blog2 = await page.getByText('second blog author2')
+        const blog3 = await page.getByText('third blog author3')
+
+        await blog1.getByRole('button', { name: 'view' }).click()
+        await blog1.getByTestId('like-button').click()
+        await page.waitForTimeout(2000)
+        await blog1.getByRole('button', { name: 'hide' }).click()
+
+        await blog2.getByRole('button', { name: 'view' }).click()
+        await blog2.getByTestId('like-button').click()
+        await page.waitForTimeout(2000)
+        await blog2.getByTestId('like-button').click()
+        await page.waitForTimeout(2000)
+        await blog2.getByRole('button', { name: 'hide' }).click()
+
+        await blog3.getByRole('button', { name: 'view' }).click()
+        await blog3.getByTestId('like-button').click()
+        await page.waitForTimeout(2000)
+        await blog3.getByTestId('like-button').click()
+        await page.waitForTimeout(2000)
+        await blog3.getByTestId('like-button').click()
+        await page.waitForTimeout(2000)
+        await blog3.getByRole('button', { name: 'hide' }).click()
+
+        const blogs = await page.locator('.blog').all()
+        await expect(blogs[0]).toContainText('third blog author3')
+        await expect(blogs[1]).toContainText('second blog author2')
+        await expect(blogs[2]).toContainText('first blog author1')
       })
     })
   })
