@@ -53,13 +53,42 @@ describe('Blog app', () => {
       beforeEach(async ({ page }) => {
         await createBlog(page, 'first blog', 'author1', 'https://first.blog')
         await createBlog(page, 'second blog', 'author2', 'https://second.blog')
-        await createBlog(page, 'third blog', 'author3', 'https://third.blog')
       })
 
-      test.only('a blog can be liked', async ({ page }) => {
-        await page.getByText('second blog').click()
+      test('a blog can be liked', async ({ page }) => {
+        const blog = await page.getByText('first blog author1')
+        await blog.getByRole('button', { name: 'view' }).click()
         await page.getByTestId('like-button').click()
-        await expect(page.locator('text=likes 1')).toBeVisible()
+        await expect(blog).toContainText('likes: 1')
+      })
+
+      test.only('a blog can be deleted', async ({ page }) => {
+        page.on('dialog', async dialog => {
+          await dialog.accept()
+        })
+
+        const blog = await page.getByText('second blog author2')
+        await blog.getByRole('button', { name: 'view' }).click()
+        await blog.getByRole('button', { name: 'remove' }).click()
+
+        await page.getByText('first blog author1')
+        await expect(await page.getByText('second blog author2')).not.toBeVisible()
+      })
+
+      test('remove button is not shown for blogs created by other users', async ({ page, request }) => {
+        await request.post('/api/users', {
+          data: {
+            username: 'nothanks',
+            password: 'quirky',
+            name: 'Normaluser'
+          }
+        })
+        await page.getByRole('button', { name: 'logout' }).click()
+        await loginWith(page, 'nothanks', 'quirky')
+
+        const blog = await page.getByText('second blog author2')
+        await blog.getByRole('button', { name: 'view' }).click()
+        await expect(blog.getByRole('button', { name: 'remove' })).not.toBeVisible()
       })
     })
   })

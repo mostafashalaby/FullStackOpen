@@ -1,6 +1,6 @@
 import { useState } from 'react'
 
-const Blog = ({ blog, updateLike, removeBlog }) => {
+const Blog = ({ blog, updateLike, removeBlog, user }) => {
   const blogStyle = {
     paddingTop: 10,
     paddingLeft: 2,
@@ -11,6 +11,13 @@ const Blog = ({ blog, updateLike, removeBlog }) => {
 
   const [visible, setVisible] = useState(false)
 
+  const sameUser = user && blog.user && user.username === blog.user.username
+  if (user && blog.user) {
+    console.log('user.username', user.username)
+    console.log('blog.user.username', blog.user.username)
+  }
+  console.log('sameUser', sameUser)
+  
   const handleLike = async (event) => {
     event.preventDefault()
 
@@ -40,11 +47,11 @@ const Blog = ({ blog, updateLike, removeBlog }) => {
       {visible && (
         <div>
           <p>{blog.url}</p>
-          <p>{blog.likes} <button data-testid='like-button' onClick={ handleLike }>
+          <p>likes: {blog.likes} <button data-testid='like-button' onClick={ handleLike }>
             like
           </button></p>
           <p>{blog.user.name}</p>
-          <button onClick={ handleDelete }>remove</button>
+          {sameUser && (<button onClick={ handleDelete }>remove</button>)}
         </div>
       )}
     </div>
