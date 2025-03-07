@@ -1,7 +1,16 @@
+import { useContext } from "react"
+import NotificationContext from "../NotificationContext"
+
 const AnecdoteForm = ({ addAnecdote }) => {
+  const [notification, notificationDispatch] = useContext(NotificationContext)
 
   const onCreate = (event) => {
+    const content = event.target.anecdote.value
     addAnecdote(event)
+    notificationDispatch({ type: "SET_NOTIFICATION", data: `you created '${content}'` })
+    setTimeout(() => {
+      notificationDispatch({ type: "SET_NOTIFICATION", data: "" })
+    }, 5000)
 }
 
   return (
