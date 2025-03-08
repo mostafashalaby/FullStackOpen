@@ -2,6 +2,8 @@ import { useState, useContext } from 'react'
 import NotificationContext from './NotificationContext'
 import { useQuery, useQueryClient, useMutation } from '@tanstack/react-query'
 
+import { useField } from './hooks/index'
+
 import {
   Routes,
   Route,
@@ -70,9 +72,9 @@ const Footer = () => (
 )
 
 const CreateNew = (props) => {
-  const [content, setContent] = useState('')
-  const [author, setAuthor] = useState('')
-  const [info, setInfo] = useState('')
+  const content = useField('content')
+  const author = useField('author')
+  const info = useField('info')
 
   const [notification, notificationDispatch] = useContext(NotificationContext)
 
@@ -81,23 +83,32 @@ const CreateNew = (props) => {
   const handleSubmit = (e) => {
     e.preventDefault()
     props.addNew({
-      content,
-      author,
-      info,
+      content: content.value,
+      author: author.value,
+      info: info.value,
       votes: 0
     })
 
-    setContent('')
-    setAuthor('')
-    setInfo('')
-
     navigate('/')
-    notificationDispatch({ type: "SET_NOTIFICATION", data: `a new anecdote ${content} created!` })
+    notificationDispatch({ type: "SET_NOTIFICATION", data: `a new anecdote ${content.value} created!` })
     setTimeout(() => {
       notificationDispatch({ type: "SET_NOTIFICATION", data: "" })
     }, 5000)
 
   }
+
+  const handleReset = (e) => {
+    e.preventDefault()
+    resetContent()
+    resetAuthor()
+    resetInfo()
+  }
+
+
+  // Destructure and exclude `reset` from the returned object
+  const { reset: resetContent, ...contentProps } = content
+  const { reset: resetAuthor, ...authorProps } = author
+  const { reset: resetInfo, ...infoProps } = info
 
   return (
     <div>
@@ -105,17 +116,18 @@ const CreateNew = (props) => {
       <form onSubmit={handleSubmit}>
         <div>
           content
-          <input name='content' value={content} onChange={(e) => setContent(e.target.value)} />
+          <input {...contentProps} />
         </div>
         <div>
           author
-          <input name='author' value={author} onChange={(e) => setAuthor(e.target.value)} />
+          <input {...authorProps} />
         </div>
         <div>
           url for more info
-          <input name='info' value={info} onChange={(e)=> setInfo(e.target.value)} />
+          <input {...infoProps} />
         </div>
         <button>create</button>
+        <button onClick={handleReset}>reset</button>
       </form>
     </div>
   )
