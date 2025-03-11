@@ -1,22 +1,30 @@
-import { useState } from "react";
+import { useState } from "react"
+import { createBlog } from "../reducers/blogReducer"
+import { showNotification } from "../reducers/notificationReducer"
+import { useDispatch } from "react-redux"
 
-const BlogForm = ({ createBlog }) => {
-  const [title, setTitle] = useState("");
-  const [author, setAuthor] = useState("");
-  const [url, setUrl] = useState("");
+const BlogForm = () => {
+  const [title, setTitle] = useState("")
+  const [author, setAuthor] = useState("")
+  const [url, setUrl] = useState("")
 
-  const handleCreate = (event) => {
-    event.preventDefault();
-    createBlog({
-      title,
-      author,
-      url,
-    });
+  const dispatch = useDispatch()
 
-    setTitle("");
-    setAuthor("");
-    setUrl("");
-  };
+  const handleCreate = async (event) => {
+    event.preventDefault()
+
+    try {
+      const returnedBlog = await dispatch(createBlog({ title, author, url }))
+
+      setTitle("")
+      setAuthor("")
+      setUrl("")
+  
+      dispatch(showNotification(`A new blog ${returnedBlog.title} by ${returnedBlog.author} added`, 'success', 5))
+    } catch (exception) {
+      dispatch(showNotification('Failed to create a new blog', 'error', 5))
+    }
+  }
 
   return (
     <div>
@@ -55,7 +63,7 @@ const BlogForm = ({ createBlog }) => {
         <button type="submit">create</button>
       </form>
     </div>
-  );
-};
+  )
+}
 
-export default BlogForm;
+export default BlogForm

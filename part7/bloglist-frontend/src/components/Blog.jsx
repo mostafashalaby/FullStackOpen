@@ -1,41 +1,50 @@
-import { useState } from "react";
+import { useState } from "react"
+import { updateLike, removeBlog } from "../reducers/blogReducer"
+import { showNotification } from "../reducers/notificationReducer"
+import { useDispatch } from "react-redux"
 
-const Blog = ({ blog, updateLike, removeBlog, user }) => {
+const Blog = ({ blog, user }) => {
   const blogStyle = {
     paddingTop: 10,
     paddingLeft: 2,
     border: "solid",
     borderWidth: 1,
     marginBottom: 5,
-  };
-
-  const [visible, setVisible] = useState(false);
-
-  const sameUser = user && blog.user && user.username === blog.user.username;
-  if (user && blog.user) {
-    console.log("user.username", user.username);
-    console.log("blog.user.username", blog.user.username);
   }
-  console.log("sameUser", sameUser);
+
+  const dispatch = useDispatch()
+
+  const [visible, setVisible] = useState(false)
+
+  const sameUser = user && blog.user && user.username === blog.user.username
 
   const handleLike = async (event) => {
-    event.preventDefault();
+    event.preventDefault()
 
-    const updatedBlog = {
-      ...blog,
-      likes: blog.likes + 1,
-    };
+    try {
+      const updatedBlog = await dispatch(updateLike(blog))
 
-    updateLike(blog.id, updatedBlog);
-  };
+      dispatch(showNotification(`Liked blog '${updatedBlog.title}' by '${updatedBlog.author}'`, 'success', 5))
+    }
+    catch (exception) {
+      dispatch(showNotification('Failed to like blog', 'error', 5))
+    }
+  }
 
   const handleDelete = async (event) => {
-    event.preventDefault();
+    event.preventDefault()
 
     if (window.confirm(`Remove blog ${blog.title} by ${blog.author}`)) {
-      removeBlog(blog.id);
+      try {
+        await dispatch(removeBlog(blog.id))
+
+        dispatch(showNotification(`Removed blog '${blog.title}' by '${blog.author}'`, 'success', 5))
+      }
+      catch (exception) {
+        dispatch(showNotification('Failed to remove blog', 'error', 5))
     }
-  };
+  }
+}
 
   return (
     <div className="blog" style={blogStyle}>
@@ -57,7 +66,7 @@ const Blog = ({ blog, updateLike, removeBlog, user }) => {
         </div>
       )}
     </div>
-  );
-};
+  )
+}
 
-export default Blog;
+export default Blog
