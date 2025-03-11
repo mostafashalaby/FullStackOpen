@@ -4,11 +4,15 @@ import blogService from "./services/blogs"
 import Notification from "./components/Notification"
 import Togglable from "./components/Togglable"
 import BlogForm from "./components/BlogForm"
+import Menu from "./components/Menu"
+import Users from "./components/Users"
+import User from "./components/User"
 
 import { useDispatch, useSelector } from 'react-redux'
-import { showNotification } from "./reducers/notificationReducer"
-import { initializeBlogs } from "./reducers/blogReducer"
-import { setUserFromLocalStorage, login, logout } from "./reducers/userReducer"
+import { showNotification } from "./reducers/notificationReducer.js"
+import { initializeBlogs } from "./reducers/blogReducer.js"
+import { setUserFromLocalStorage, login, logout } from "./reducers/userReducer.js"
+import { Routes, Route } from "react-router-dom"
 
 const App = () => {
   const [username, setUsername] = useState("")
@@ -112,7 +116,12 @@ const App = () => {
 
   return (
     <div>
+      <Menu/>
       <Notification/>
+      <Routes>
+        <Route path = "/users" element = {<Users/>}/>
+        <Route path = "/users/:id" element = {<User/>}/>
+      </Routes>
       {user === null ? loginForm() : blogForm()}
     </div>
   )
