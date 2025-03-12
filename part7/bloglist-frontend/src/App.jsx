@@ -7,30 +7,28 @@ import BlogForm from "./components/BlogForm"
 import Menu from "./components/Menu"
 import Users from "./components/Users"
 import User from "./components/User"
+import Blogs from "./components/Blogs"
 
-import { useDispatch, useSelector } from 'react-redux'
+import { useDispatch, useSelector } from "react-redux"
 import { showNotification } from "./reducers/notificationReducer.js"
 import { initializeBlogs } from "./reducers/blogReducer.js"
-import { setUserFromLocalStorage, login, logout } from "./reducers/userReducer.js"
-import { Routes, Route } from "react-router-dom"
+import {
+  setUserFromLocalStorage,
+  login,
+  logout,
+} from "./reducers/userReducer.js"
+import { Routes, Route, Navigate } from "react-router-dom"
 
 const App = () => {
   const [username, setUsername] = useState("")
   const [password, setPassword] = useState("")
 
-  const blogs = useSelector((state) => state.blogs)
   const user = useSelector((state) => state.user)
   const dispatch = useDispatch()
 
-  const blogFormRef = useRef()
-
-  useEffect(() => {
-    dispatch(initializeBlogs())
-  }, [])
-
   useEffect(() => {
     const user = dispatch(setUserFromLocalStorage())
-      blogService.setToken(user.token)
+    blogService.setToken(user.token)
   }, [])
 
   const handleLogin = async (event) => {
@@ -42,10 +40,9 @@ const App = () => {
       setUsername("")
       setPassword("")
 
-      dispatch(showNotification('Logged in successfully', 'success', 5))
-
+      dispatch(showNotification("Logged in successfully", "success", 5))
     } catch (exception) {
-      dispatch(showNotification('Wrong credentials', 'error', 5))
+      dispatch(showNotification("Wrong credentials", "error", 5))
     }
   }
 
@@ -55,11 +52,11 @@ const App = () => {
       blogService.setToken(null)
 
       setUsername("")
-    setPassword("")
+      setPassword("")
 
-    dispatch(showNotification('Logged out successfully', 'success', 5))
+      dispatch(showNotification("Logged out successfully", "success", 5))
     } catch (exception) {
-      dispatch(showNotification('Failed to logout', 'error', 5))
+      dispatch(showNotification("Failed to logout", "error", 5))
     }
   }
 
@@ -90,39 +87,26 @@ const App = () => {
     </div>
   )
 
-  const blogForm = () => (
-    <div>
-      <h1>Blogs Page</h1>
-      <div style={{ display: "flex", alignItems: "center" }}>
-        <p>{user.name} logged-in</p>
-        <button onClick={handleLogout} style={{ marginLeft: "10px" }}>
-          logout
-        </button>
-      </div>
-      <Togglable buttonLabel="new blog" ref={blogFormRef}>
-        <BlogForm />
-      </Togglable>
-      <h2>Available Blogs</h2>
-      {blogs
-        .map((blog) => (
-          <Blog
-            key={blog.id}
-            blog={blog}
-            user={user}
-          />
-        ))}
-    </div>
-  )
 
   return (
     <div>
-      <Menu/>
-      <Notification/>
-      <Routes>
-        <Route path = "/users" element = {<Users/>}/>
-        <Route path = "/users/:id" element = {<User/>}/>
-      </Routes>
-      {user === null ? loginForm() : blogForm()}
+      {user ? ( <div>
+      <Menu
+      handleLogout={handleLogout}
+    />
+    <Notification />
+    <Routes>
+      <Route path="/" element={<Blogs />} />
+      <Route path="/users" element={<Users />} />
+      <Route path="/users/:id" element={<User />} />
+      <Route path="/blogs" element={<Blogs />} />
+      <Route path="/blogs/:id" element={<Blog />} />
+      <Route path="*" element={<Navigate to="/" />} />
+    </Routes>
+    </div>
+      ) : (
+        loginForm()
+      )}
     </div>
   )
 }

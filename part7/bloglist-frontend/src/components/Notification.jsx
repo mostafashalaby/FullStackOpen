@@ -7,7 +7,11 @@ const Notification = () => {
     return null
   }
 
-  return <div className={`notification ${notification.type}`}>{notification.message}</div>
+  return (
+    <div className={`notification ${notification.type}`}>
+      {notification.message}
+    </div>
+  )
 }
 
 export default Notification

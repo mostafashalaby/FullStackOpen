@@ -19,10 +19,16 @@ const BlogForm = () => {
       setTitle("")
       setAuthor("")
       setUrl("")
-  
-      dispatch(showNotification(`A new blog ${returnedBlog.title} by ${returnedBlog.author} added`, 'success', 5))
+
+      dispatch(
+        showNotification(
+          `A new blog ${returnedBlog.title} by ${returnedBlog.author} added`,
+          "success",
+          5,
+        ),
+      )
     } catch (exception) {
-      dispatch(showNotification('Failed to create a new blog', 'error', 5))
+      dispatch(showNotification("Failed to create a new blog", "error", 5))
     }
   }
 
