@@ -1,7 +1,12 @@
 import { Link } from "react-router-dom"
 import { useSelector } from "react-redux"
+import { logout } from "../reducers/userReducer"
+import blogService from "../services/blogs"
+import { showNotification } from "../reducers/notificationReducer"
+import { useDispatch } from "react-redux"
 
-const Menu = ({handleLogout}) => {
+
+const Menu = () => {
   const padding = {
     paddingRight: 5,
   }
@@ -13,8 +18,20 @@ const Menu = ({handleLogout}) => {
     padding
   }
 
+  const dispatch = useDispatch()
   const user = useSelector((state) => state.user)
 
+    const handleLogout = () => {
+      try {
+        dispatch(logout())
+        blogService.setToken(null)
+  
+        dispatch(showNotification("Logged out successfully", "success", 5))
+      } catch (exception) {
+        dispatch(showNotification("Failed to logout", "error", 5))
+      }
+    }
+  
   return (
     <div style={menuStyle}>
       <Link style={padding} to="/">

@@ -1,5 +1,5 @@
 import { useParams, useNavigate } from "react-router-dom"
-import { updateLike, removeBlog } from "../reducers/blogReducer.js"
+import { updateLike, removeBlog, updateComment } from "../reducers/blogReducer.js"
 import { showNotification } from "../reducers/notificationReducer.js"
 import { useDispatch, useSelector } from "react-redux"
 
@@ -14,8 +14,6 @@ const Blog = () => {
     return null
   }
 
-  console.log("Blog.jsx, blog:", blog)
-  console.log("Blog.jsx, user:", user)
   const sameUser = user && blog.user && user.username === blog.user.username
 
   const handleLike = async (event) => {
@@ -57,6 +55,25 @@ const Blog = () => {
     }
   }
 
+  const handleComment = async (event) => {
+    event.preventDefault()
+
+    try {
+      const updatedBlog = await dispatch(updateComment(blog.id, event.target[0].value))
+
+      dispatch(
+        showNotification(
+          `Added comment '${updatedBlog.comments.slice(-1)}' to blog '${updatedBlog.title}'`,
+          "success",
+          5,
+        ),
+      )
+    }
+    catch (exception) {
+      dispatch(showNotification("Failed to add comment", "error", 5))
+    }
+  }
+
   return (
     <div className="blog">
       <h2>
@@ -72,6 +89,16 @@ const Blog = () => {
         </p>
         <p>{blog.user.name}</p>
         {sameUser && <button onClick={handleDelete}>remove</button>}
+        <h3>comments</h3>
+        <form onSubmit={handleComment}>
+          <input type="text" />
+          <button type="submit">add comment</button>
+        </form>
+        <ul>
+          {blog.comments.map((comment) => (
+            <li key={comment}>{comment}</li>
+          ))}
+        </ul>
       </div>
     </div>
   )
