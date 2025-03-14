@@ -35,7 +35,7 @@ const App = () => {
   }
 
   return (
-    <div>
+    <div className="container">
       {user ? ( <div>
       <Menu/>
     <Notification />
